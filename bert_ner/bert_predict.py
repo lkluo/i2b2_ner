@@ -13,7 +13,7 @@ import bert
 # from i2b2.dataset_multi_tasks import datasets
 from bert_ner.dataset_text_problem.xml_parser import XmlParser
 # from third_party import tokenization
-from bert_ner.bert_text import model_fn
+from bert_ner.bert_train import model_fn
 from bert_ner.dataset_text_problem import tag_encoder
 from bert_ner.write2xml import write2xml
 
@@ -135,10 +135,6 @@ def main(_):
     else:
         rule_predictions = [[None]] * len(input_sentences)
 
-    # tf.logging.info("All rule predictions:")
-    # tf.logging.info(len(rule_predictions))
-    # pprint(rule_predictions)
-
     for file_count, file_size in enumerate(input_sentence_lengths):
         file_model_predictions = model_predictions[:file_size]
         file_rule_predictions = rule_predictions[:file_size]
@@ -167,88 +163,6 @@ def main(_):
         # delete elements
         del model_predictions[:file_size]
         del rule_predictions[:file_size]
-
-        # if xml_filename == "110-01.xml":
-        #     tf.logging.info("Model prediction:")
-        #     pprint(file_model_predictions)
-        #     tf.logging.info("Rule prediction:")
-        #     pprint(file_rule_predictions)
-        #     tf.logging.info("All prediction:")
-        #     pprint(file_predictions)
-        #     return
-
-
-
-    # sentence_id = 1
-    # file_labels = []
-    # file_counter = 0
-    # # print(input_sentences)
-    # for pred, rule_pred in zip(pred_ids, rule_outputs):
-    #     if len(input_sentence_lengths) <= 0:
-    #         break
-    #     # print(input_sentence_lengths, sentence_id)
-    #     label = label_encoder.decode(pred)
-    #     if sentence_id < input_sentence_lengths[0]:
-    #         file_labels.append(label)
-    #         #####
-    #         if rule_pred is not None:
-    #             file_labels.extend(rule_pred)
-    #         sentence_id += 1
-    #     else:
-    #         del input_sentence_lengths[0]
-    #         # write to file
-    #         tf.logging.info("Writing [%s/%s] .." % (file_counter, len(xml_files)))
-    #         xml_filename = os.path.basename(xml_files[file_counter])
-    #         xml_filepath = os.path.join(params["export_xml_path"], xml_filename)
-    #         file_labels.append(label)
-    #         #####
-    #         if rule_pred is not None:
-    #             file_labels.extend(rule_pred)
-    #         write2xml(file_labels, xml_filepath)
-    #         # update file counter
-    #         sentence_id = 1
-    #         file_counter += 1
-    #         file_labels = []
-        # update start
-
-
-    # for xml_file in xml_files:
-    #     tf.logging.info("Processing %s ..." % xml_file)
-    #     # predict input fn
-    #     input_sentences = read_xml_text(xml_file)
-    #
-    #     input_examples = [bert.run_classifier.InputExample(
-    #         guid="",
-    #         text_a=x, text_b=None, label="null:null:null:null:null"
-    #     ) for x in input_sentences]
-    #     input_features = bert.run_classifier.convert_examples_to_features(
-    #         input_examples, label_list,
-    #         params["max_sequence_length"],
-    #         tokenizer
-    #     )
-    #     predict_input_fn = bert.run_classifier.input_fn_builder(
-    #         features=input_features,
-    #         seq_length=params["max_sequence_length"],
-    #         is_training=False,
-    #         drop_remainder=False
-    #     )
-    #
-    #     pred_ids = estimator.predict(input_fn=predict_input_fn)
-    #     this_labels = []
-    #     counter = 0
-    #     for pred in pred_ids:
-    #         label = label_encoder.decode(pred)
-    #         this_labels.append(label)
-    #         if os.path.isfile(xmlpath):
-    #             print("Counter:", counter)
-    #             print(input_sentences[counter])
-    #             print(label)
-    #             print("="*10)
-    #             counter += 1
-    #
-    #     xml_filename = os.path.basename(xml_file)
-    #     xml_filepath = os.path.join(params["export_xml_path"], xml_filename)
-    #     write2xml(this_labels, xml_filepath)
 
 
 
